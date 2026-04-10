@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Misra Sweets Corner</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Hind:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Hind', sans-serif;
+      background: #F8F5F0;
+      color: #2C1810;
+      min-height: 100vh;
+    }
+    :root {
+      --saffron: #E8821A;
+      --gold: #F4C542;
+      --shadow: 0 4px 12px rgba(0,0,0,0.08);
+      --shadow-hover: 0 8px 20px rgba(0,0,0,0.12);
+    }
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      background: white;
+      box-shadow: var(--shadow);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.8rem 1.5rem;
+      flex-wrap: wrap;
+      border-bottom: 2px solid var(--saffron);
+    }
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 900;
+      cursor: pointer;
+      background: linear-gradient(135deg, #E8821A 0%, #F4C542 40%, #E8821A 80%, #F4C542 100%);
+      background-size: 300% 100%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: gradientShift 4s ease infinite, glowPulse 2s ease-in-out infinite, bounce 2s ease infinite;
+      white-space: nowrap;
+      display: inline-block;
+    }
+    @keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+    @keyframes glowPulse { 0% { text-shadow: 0 0 2px rgba(232,130,26,0.3); } 50% { text-shadow: 0 0 12px rgba(232,130,26,0.8), 0 0 20px rgba(244,197,66,0.5); } 100% { text-shadow: 0 0 2px rgba(232,130,26,0.3); } }
+    @keyframes bounce { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-3px); } }
+    
+    .nav-links { display: flex; gap: 0.8rem; list-style: none; flex-wrap: wrap; align-items: center; }
+    .nav-links li a { color: #2C1810; text-decoration: none; font-weight: 600; cursor: pointer; padding: 0.3rem 0.6rem; }
+    .nav-links li a:hover { color: var(--saffron); background: #E8821A10; border-radius: 2rem; }
+    .cart-icon { position: relative; cursor: pointer; font-size: 1.3rem; }
+    .cart-count { position: absolute; top: -8px; right: -12px; background: #D94F3D; color: white; font-size: 0.7rem; padding: 0.1rem 0.4rem; border-radius: 1rem; }
+    .logout-btn { background: #D94F3D20; color: #D94F3D; border: none; padding: 0.2rem 0.6rem; border-radius: 1rem; cursor: pointer; font-size: 0.7rem; }
+    .admin-badge { background: #E8821A20; color: #E8821A; padding: 0.2rem 0.6rem; border-radius: 1rem; font-size: 0.7rem; }
+    
+    .hero {
+      min-height: 60vh;
+      background: linear-gradient(135deg, #FFF8F0, #FFEFDF);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      text-align: center;
+      padding: 6rem 1rem 3rem;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 7vw, 3.8rem);
+      font-weight: 900;
+      background: linear-gradient(135deg, #2C1810 0%, #E8821A 40%, #F4C542 60%, #E8821A 100%);
+      background-size: 300% 100%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: heroGradient 5s ease infinite, fadeInUp 1s ease;
+    }
+    @keyframes heroGradient { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    .hero h1 em { font-style: italic; display: inline-block; animation: pulse 2s ease-in-out infinite; }
+    @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.02); } }
+    .hero-badge { background: rgba(232,130,26,0.15); color: var(--saffron); padding: 0.3rem 1rem; border-radius: 2rem; font-size: 0.7rem; margin-bottom: 1rem; display: inline-block; }
+    
+    .btn-primary { background: var(--saffron); border: none; padding: 0.6rem 1.5rem; border-radius: 2rem; color: white; font-weight: 700; cursor: pointer; margin: 0.5rem; box-shadow: var(--shadow); }
+    .btn-outline { background: transparent; border: 2px solid var(--saffron); padding: 0.55rem 1.5rem; border-radius: 2rem; color: var(--saffron); font-weight: 600; cursor: pointer; }
+    .btn-spin { background: linear-gradient(135deg, #D94F3D, #E8821A); border: none; padding: 0.6rem 1.8rem; border-radius: 2rem; color: white; font-weight: 700; cursor: pointer; animation: spinPulse 1.5s infinite; }
+    @keyframes spinPulse { 0% { transform: scale(1); } 50% { transform: scale(1.03); } 100% { transform: scale(1); } }
+    
+    .info-section { padding: 2rem 1rem; max-width: 1200px; margin: 0 auto; }
+    .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; }
+    .info-card { background: white; border-radius: 1.2rem; padding: 1.5rem; text-align: center; box-shadow: var(--shadow); transition: 0.2s; }
+    .info-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); }
+    .info-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+    .info-card h3 { color: var(--saffron); margin-bottom: 0.5rem; }
+    
+    .animated-gallery {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      margin: 2rem 0;
+      padding: 1rem;
+    }
+    .animated-img {
+      position: relative;
+      width: 200px;
+      height: 200px;
+      border-radius: 1rem;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      animation: float 3s ease-in-out infinite;
+    }
+    .animated-img:nth-child(1) { animation-delay: 0s; }
+    .animated-img:nth-child(2) { animation-delay: 0.5s; }
+    .animated-img:nth-child(3) { animation-delay: 1s; }
+    .animated-img:nth-child(4) { animation-delay: 1.5s; }
+    @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-15px); } 100% { transform: translateY(0px); } }
+    .animated-img:hover { transform: scale(1.05) translateY(-5px); box-shadow: var(--shadow-hover); }
+    .animated-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
+    .animated-img:hover img { transform: scale(1.1); }
+    .animated-caption {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(transparent, rgba(0,0,0,0.7));
+      color: white;
+      padding: 0.5rem;
+      text-align: center;
+      font-weight: 600;
+      transform: translateY(100%);
+      transition: transform 0.3s ease;
+    }
+    .animated-img:hover .animated-caption { transform: translateY(0); }
+    
+    .owner-section {
+      background: linear-gradient(135deg, #FFF8F0, #FFEFDF);
+      border-radius: 1.5rem;
+      padding: 1.5rem;
+      margin-top: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      box-shadow: var(--shadow);
+    }
+    .owner-img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid var(--saffron); }
+    .owner-message-box { flex: 1; }
+    .owner-name { color: var(--saffron); font-size: 1.2rem; font-weight: 700; }
+    .owner-message { font-size: 1rem; margin-top: 0.5rem; font-style: italic; color: #2C1810; }
+    
+    .blog-section { background: white; border-radius: 1.2rem; padding: 1.5rem; margin-top: 1.5rem; box-shadow: var(--shadow); }
+    .blog-title { color: var(--saffron); font-size: 1.3rem; margin-bottom: 0.5rem; }
+    .blog-date { font-size: 0.7rem; color: #888; margin-bottom: 0.5rem; }
+    .blog-content { line-height: 1.6; }
+    
+    .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-top: 1rem; }
+    .gallery-img { width: 100%; height: 140px; object-fit: cover; border-radius: 1rem; box-shadow: var(--shadow); cursor: pointer; }
+    
+    .page { display: none; padding-top: 70px; }
+    .page.active { display: block; }
+    
+    .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1rem; padding: 1rem; max-width: 1200px; margin: 0 auto; }
+    .product-card { background: white; border-radius: 1rem; overflow: hidden; box-shadow: var(--shadow); transition: 0.2s; }
+    .product-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); }
+    .product-img { width: 100%; height: 140px; object-fit: cover; background: #F0E0CC; }
+    .product-info { padding: 0.6rem; }
+    .product-name { font-weight: 700; font-size: 0.9rem; }
+    .product-price { color: var(--saffron); font-weight: 900; font-size: 1rem; }
+    .add-to-cart { background: var(--saffron); border: none; padding: 0.3rem; border-radius: 1.5rem; color: white; font-weight: 600; font-size: 0.7rem; margin-top: 0.4rem; cursor: pointer; width: 100%; }
+    .category-title { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--saffron); padding: 0.5rem 1rem; border-left: 4px solid var(--saffron); margin: 0.5rem 0 0 1rem; }
+    
+    .admin-panel { background: white; border-radius: 1.5rem; padding: 1.5rem; margin: 1rem; box-shadow: var(--shadow); }
+    .admin-form input, .admin-form select, .admin-form textarea { width: 100%; padding: 0.6rem; margin: 0.5rem 0; border: 1px solid #ddd; border-radius: 0.8rem; }
+    .admin-product-item, .admin-gallery-item, .admin-offer-item { display: flex; justify-content: space-between; align-items: center; background: #FEF8F0; padding: 0.5rem; border-radius: 0.8rem; margin-bottom: 0.5rem; flex-wrap: wrap; }
+    .delete-btn { background: #D94F3D; color: white; border: none; padding: 0.2rem 0.6rem; border-radius: 1rem; cursor: pointer; }
+    
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2000; justify-content: center; align-items: center; }
+    .modal.active { display: flex; }
+    .login-box, .cart-content { background: white; border-radius: 1.5rem; padding: 1.5rem; width: 90%; max-width: 400px; }
+    .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid #eee; }
+    .cart-item-delete { background: #D94F3D; color: white; border: none; padding: 0.2rem 0.5rem; border-radius: 1rem; cursor: pointer; font-size: 0.7rem; }
+    .close-cart, .close-modal-btn { float: right; font-size: 1.5rem; cursor: pointer; color: var(--saffron); }
+    
+    .offers-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+    .offer-card { background: linear-gradient(135deg, #FFF0E0, #FFE0C0); border-radius: 1rem; padding: 1rem; text-align: center; border-left: 4px solid #D94F3D; }
+    
+    footer { background: #1A0C03; text-align: center; padding: 1.5rem; color: rgba(255,248,240,0.6); margin-top: 1rem; }
+    .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #2E7D32; color: white; padding: 0.5rem 1rem; border-radius: 2rem; z-index: 1500; display: none; }
+    .result-box { background: #FFF0E0; border-radius: 1rem; padding: 0.8rem; margin-top: 1rem; text-align: center; }
+    .captcha-box { background: #FFF0E0; padding: 0.8rem; border-radius: 1rem; margin: 0.5rem 0; }
+    .captcha-code { font-family: monospace; font-size: 1.3rem; font-weight: 900; background: #2C1810; color: var(--gold); display: inline-block; padding: 0.2rem 1rem; border-radius: 0.5rem; letter-spacing: 3px; }
+    .wheel-container { position: relative; width: 260px; height: 260px; margin: 1rem auto; }
+    canvas { width: 100%; height: 100%; border-radius: 50%; box-shadow: var(--shadow); }
+    .spin-btn-small { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 60px; height: 60px; background: var(--saffron); border: 3px solid var(--gold); border-radius: 50%; font-weight: bold; cursor: pointer; }
+    
+    @media (max-width: 550px) { 
+      .navbar { flex-direction: column; gap: 0.5rem; } 
+      .products-grid { grid-template-columns: repeat(2, 1fr); } 
+      .nav-links { justify-content: center; } 
+      .owner-section { flex-direction: column; text-align: center; }
+      .animated-img { width: 150px; height: 150px; }
+      .animated-gallery { gap: 0.8rem; }
+      .logo { font-size: 1.1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="navbar">
+  <div class="logo" onclick="showPage('home')">Misra Sweets Corner</div>
+  <ul class="nav-links">
+    <li><a onclick="showPage('home')">🏠 Home</a></li>
+    <li><a onclick="showPage('menu')">🍬 Menu</a></li>
+    <li><a onclick="showPage('contact')">📞 Contact</a></li>
+    <li><a onclick="showPage('offers')">🎁 Offers</a></li>
+    <li><a onclick="showAdminLogin()">⚙️ Admin Panel</a></li>
+    <li id="adminNavItem" style="display:none;"><span class="admin-badge">👑 অ্যাডমিন</span></li>
+    <li id="logoutBtnItem" style="display:none;"><button class="logout-btn" onclick="adminLogout()">লগআউট</button></li>
+  </ul>
+  <div class="cart-icon" onclick="openCart()">
+    🛒 <span class="cart-count" id="cartCount">0</span>
+  </div>
+</div>
+
+<!-- HOME PAGE -->
+<div id="homePage" class="page active">
+  <div class="hero" id="heroSection">
+    <div class="hero-badge" id="heroBadge">✦ খাঁটি মিষ্টির ঠিকানা ✦</div>
+    <h1 id="heroTitle">Misra <em>Sweets Corner</em></h1>
+    <div class="btn-group">
+      <button class="btn-primary" onclick="showPage('menu')">🍬 মেনু দেখুন</button>
+      <button class="btn-spin" onclick="openSpinModal()">🎡 স্পিন করুন & জিতুন 🎁</button>
+    </div>
+  </div>
+
+  <!-- অ্যানিমেটেড গ্যালারি (এখন JavaScript দিয়ে লোড হবে) -->
+  <div class="info-section">
+    <div id="animatedGalleryContainer"></div>
+  </div>
+
+  <!-- Owner Message Section -->
+  <div class="info-section">
+    <div class="owner-section" id="ownerSection">
+      <img class="owner-img" id="ownerImg" src="https://placehold.co/100x100/E8821A/white?text=Owner" alt="Owner">
+      <div class="owner-message-box">
+        <div class="owner-name" id="ownerName">মালিকের বার্তা</div>
+        <div class="owner-message" id="ownerMsg">আমাদের মিষ্টি খেয়ে আপনারা সন্তুষ্ট হন, এটাই আমাদের সাফল্য। ধন্যবাদ সবাইকে।</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-section">
+    <div class="info-grid">
+      <div class="info-card"><div class="info-icon">🥛</div><h3>খাঁটি উপকরণ</h3><p>প্রতিদিন তাজা দুধ ও প্রাকৃতিক উপকরণ।</p></div>
+      <div class="info-card"><div class="info-icon">🌅</div><h3>প্রতিদিন তাজা</h3><p>সকাল ৭টায় তৈরি হয় আমাদের সব মিষ্টি।</p></div>
+      <div class="info-card"><div class="info-icon">💰</div><h3>সাশ্রয়ী মূল্য</h3><p>গুণমানের সাথে আপস না করে সাশ্রয়ী দাম।</p></div>
+      <div class="info-card"><div class="info-icon">🎁</div><h3>অনুষ্ঠান স্পেশাল</h3><p>বিয়ে, পূজা, জন্মদিনের জন্য স্পেশাল প্যাকেজ।</p></div>
+    </div>
+  </div>
+
+  <!-- Daily Blog Section -->
+  <div class="info-section">
+    <div class="blog-section" id="blogSection">
+      <h2 style="color:var(--saffron);">📝 আজকের ব্লগ</h2>
+      <div id="blogContent"></div>
+    </div>
+  </div>
+
+  <!-- Gallery Section -->
+  <div class="info-section">
+    <h2 style="text-align:center; color:var(--saffron);">🍬 আমাদের কিছু স্পেশাল মিষ্টি 🍬</h2>
+    <div class="gallery-grid" id="galleryContainer"></div>
+  </div>
+
+  <footer>© ২০২৫ Misra Sweets Corner · হরিপুর, পুখুরিয়া, মালদা · পিন: 732204</footer>
+</div>
+
+<!-- MENU PAGE -->
+<div id="menuPage" class="page">
+  <div style="background: linear-gradient(135deg, #E8821A, #D94F3D); padding: 1.5rem; text-align: center; color: white;">
+    <h1>আমাদের মেনু</h1>
+    <button class="btn-outline" onclick="showPage('home')" style="background:white; margin-top:0.5rem;">← ফিরে যান</button>
+  </div>
+  <div id="productsContainer"></div>
+  <footer>সকাল ৭টা - রাত ৯টা | অর্ডার করতে হোয়াটসঅ্যাপ করুন</footer>
+</div>
+
+<!-- CONTACT PAGE -->
+<div id="contactPage" class="page">
+  <div style="background: linear-gradient(135deg, #E8821A, #D94F3D); padding: 1.5rem; text-align: center; color: white;">
+    <h1>যোগাযোগ করুন</h1>
+    <button class="btn-outline" onclick="showPage('home')" style="background:white; margin-top:0.5rem;">← ফিরে যান</button>
+  </div>
+  <div class="info-section">
+    <div class="info-card">
+      <div class="info-icon">📍</div>
+      <h3>আমাদের ঠিকানা</h3>
+      <p id="contactAddress"><strong>Misra Sweets Corner</strong><br>হরিপুর, পুখুরিয়া, মালদা<br>পশ্চিমবঙ্গ - 732204</p>
+      <p>📞 <a href="tel:+917407040273" id="contactPhone" style="color:var(--saffron);">+91 74070 40273</a></p>
+      <p>🕐 সকাল ৭টা - রাত ৯টা (সপ্তাহের সব দিন)</p>
+      <button class="btn-outline" onclick="window.open('https://maps.app.goo.gl/WzAmFyKpNmJCkVuY9','_blank')">🗺️ গুগল ম্যাপে দেখুন</button>
+      <button class="btn-primary" onclick="whatsappOrderDirect()" style="margin-top:1rem;">📲 হোয়াটসঅ্যাপে অর্ডার করুন</button>
+    </div>
+  </div>
+  <footer>সকল প্রকার অর্ডার গ্রহণ করা হয়</footer>
+</div>
+
+<!-- OFFERS PAGE -->
+<div id="offersPage" class="page">
+  <div style="background: linear-gradient(135deg, #E8821A, #D94F3D); padding: 1.5rem; text-align: center; color: white;">
+    <h1>🎉 স্পেশাল অফার 🎉</h1>
+    <button class="btn-outline" onclick="showPage('home')" style="background:white; margin-top:0.5rem;">← ফিরে যান</button>
+  </div>
+  <div class="info-section">
+    <div id="offersContainer" class="offers-grid"></div>
+  </div>
+  <footer>অফারগুলি সীমিত সময়ের জন্য প্রযোজ্য</footer>
+</div>
+
+<!-- ADMIN PAGE -->
+<div id="adminPage" class="page">
+  <div style="background: linear-gradient(135deg, #2C1810, #1A0C03); padding: 1rem; text-align: center; color: white;">
+    <h1>⚙️ অ্যাডমিন প্যানেল</h1>
+    <button class="btn-outline" onclick="showPage('home')" style="background:white; margin-top:0.5rem;">← ফিরে যান</button>
+  </div>
+  
+  <!-- অ্যানিমেটেড গ্যালারির ছবি পরিবর্তন -->
+  <div class="admin-panel">
+    <h2>🎠 অ্যানিমেটেড গ্যালারির ছবি পরিবর্তন করুন</h2>
+    <div class="admin-form">
+      <div style="margin-bottom:1rem; border-bottom:1px solid #ddd; padding-bottom:0.5rem;">
+        <h3>ছবি ১ (রসগোল্লা)</h3>
+        <input type="text" id="animatedImg1Url" placeholder="imgbb ছবির URL">
+        <input type="file" id="animatedImg1File" accept="image/*">
+      </div>
+      <div style="margin-bottom:1rem; border-bottom:1px solid #ddd; padding-bottom:0.5rem;">
+        <h3>ছবি ২ (সন্দেশ)</h3>
+        <input type="text" id="animatedImg2Url" placeholder="imgbb ছবির URL">
+        <input type="file" id="animatedImg2File" accept="image/*">
+      </div>
+      <div style="margin-bottom:1rem; border-bottom:1px solid #ddd; padding-bottom:0.5rem;">
+        <h3>ছবি ৩ (গুলাব জামুন)</h3>
+        <input type="text" id="animatedImg3Url" placeholder="imgbb ছবির URL">
+        <input type="file" id="animatedImg3File" accept="image/*">
+      </div>
+      <div style="margin-bottom:1rem;">
+        <h3>ছবি ৪ (মিষ্টি দই)</h3>
+        <input type="text" id="animatedImg4Url" placeholder="imgbb ছবির URL">
+        <input type="file" id="animatedImg4File" accept="image/*">
+      </div>
+      <button class="btn-primary" onclick="updateAnimatedGallery()">💾 অ্যানিমেটেড গ্যালারি আপডেট করুন</button>
+    </div>
+    <div id="animatedGalleryPreview" style="margin-top:1rem; display:flex; gap:0.5rem; flex-wrap:wrap;"></div>
+  </div>
+
+  <!-- imgbb লিংক দিয়ে প্রোডাক্ট যোগ -->
+  <div class="admin-panel">
+    <h2>🖼️ imgbb লিংক দিয়ে প্রোডাক্ট যোগ করুন</h2>
+    <div class="admin-form">
+      <input type="text" id="prodNameImgbb" placeholder="প্রোডাক্টের নাম">
+      <input type="number" id="prodPriceImgbb" placeholder="দাম (₹)">
+      <select id="prodCategoryImgbb">
+        <option value="মিষ্টি">🍬 মিষ্টি</option>
+        <option value="নাস্তা">🍽️ নাস্তা</option>
+        <option value="প্যাকেজ">🎁 প্যাকেজ</option>
+      </select>
+      <input type="text" id="prodImageUrlImgbb" placeholder="imgbb ছবির URL">
+      <button class="btn-primary" onclick="addProductWithImgbbUrl()">➕ imgbb লিংক দিয়ে প্রোডাক্ট যোগ করুন</button>
+    </div>
+  </div>
+
+  <!-- imgbb আপলোড -->
+  <div class="admin-panel">
+    <h2>📤 imgbb তে ছবি আপলোড করুন (URL পেতে)</h2>
+    <div class="admin-form">
+      <input type="file" id="imgbbImage" accept="image/*">
+      <button class="btn-primary" onclick="uploadToImgbb()">🚀 imgbb তে আপলোড করুন</button>
+      <div id="imgbbResult" style="margin-top:0.8rem; font-size:0.85rem;"></div>
+    </div>
+  </div>
+
+  <!-- লোকাল ফাইল দিয়ে প্রোডাক্ট যোগ -->
+  <div class="admin-panel">
+    <h2>📁 লোকাল ফাইল দিয়ে প্রোডাক্ট যোগ করুন</h2>
+    <div class="admin-form">
+      <input type="text" id="prodName" placeholder="প্রোডাক্টের নাম">
+      <input type="number" id="prodPrice" placeholder="দাম (₹)">
+      <select id="prodCategory">
+        <option value="মিষ্টি">🍬 মিষ্টি</option>
+        <option value="নাস্তা">🍽️ নাস্তা</option>
+        <option value="প্যাকেজ">🎁 প্যাকেজ</option>
+      </select>
+      <input type="file" id="prodImage" accept="image/*">
+      <button class="btn-primary" onclick="addProduct()">➕ লোকাল ফাইল দিয়ে প্রোডাক্ট যোগ করুন</button>
+    </div>
+  </div>
+
+  <!-- Owner বার্তা ও ছবি -->
+  <div class="admin-panel">
+    <h2>👑 Owner বার্তা ও ছবি</h2>
+    <div class="admin-form">
+      <input type="text" id="ownerNameInput" placeholder="মালিকের নাম">
+      <textarea id="ownerMsgInput" placeholder="মালিকের বার্তা লিখুন..." rows="3"></textarea>
+      <input type="file" id="ownerImage" accept="image/*">
+      <button class="btn-primary" onclick="updateOwnerInfo()">💾 Owner তথ্য সংরক্ষণ করুন</button>
+    </div>
+    <div id="currentOwnerPreview" style="margin-top:1rem; padding:1rem; background:#FEF8F0; border-radius:1rem;">
+      <div style="display:flex; align-items:center; gap:1rem; flex-wrap:wrap;">
+        <img id="previewOwnerImg" src="https://placehold.co/100x100/E8821A/white?text=Owner" style="width:60px;height:60px;border-radius:50%;object-fit:cover;">
+        <div><strong id="previewOwnerName"></strong><br><span id="previewOwnerMsg"></span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- গ্যালারির ছবি -->
+  <div class="admin-panel">
+    <h2>🖼️ গ্যালারির ছবি যোগ করুন (হোম পেজ)</h2>
+    <div class="admin-form">
+      <input type="file" id="galleryImage" accept="image/*">
+      <button class="btn-primary" onclick="addGalleryImage()">➕ ছবি যোগ করুন</button>
+    </div>
+    <div id="adminGalleryList"></div>
+  </div>
+
+  <!-- হিরো সেকশন এডিট -->
+  <div class="admin-panel">
+    <h2>✏️ হিরো সেকশন এডিট</h2>
+    <div class="admin-form">
+      <input type="text" id="heroBadgeInput" placeholder="ব্যাজ টেক্সট">
+      <input type="text" id="heroTitleInput" placeholder="হিরো টাইটেল">
+      <button class="btn-primary" onclick="updateHeroSection()">হিরো সেকশন আপডেট করুন</button>
+    </div>
+  </div>
+
+  <!-- অফার যোগ ও ডিলিট -->
+  <div class="admin-panel">
+    <h2>🎁 অফার যোগ করুন</h2>
+    <div class="admin-form">
+      <input type="text" id="offerTitle" placeholder="অফারের শিরোনাম">
+      <textarea id="offerDesc" placeholder="অফারের বিবরণ" rows="2"></textarea>
+      <button class="btn-primary" onclick="addOffer()">➕ অফার যোগ করুন</button>
+    </div>
+    <h3 style="margin-top:1rem;">📋 বর্তমান অফার</h3>
+    <div id="adminOffersList"></div>
+  </div>
+
+  <!-- দৈনিক ব্লগ -->
+  <div class="admin-panel">
+    <h2>📝 দৈনিক ব্লগ লিখুন</h2>
+    <div class="admin-form">
+      <input type="text" id="blogTitle" placeholder="ব্লগের শিরোনাম">
+      <textarea id="blogText" placeholder="ব্লগ কন্টেন্ট লিখুন..." rows="4"></textarea>
+      <button class="btn-primary" onclick="saveBlog()">💾 ব্লগ সংরক্ষণ করুন</button>
+    </div>
+  </div>
+
+  <!-- যোগাযোগ তথ্য এডিট -->
+  <div class="admin-panel">
+    <h2>📞 যোগাযোগ তথ্য এডিট</h2>
+    <div class="admin-form">
+      <input type="text" id="contactAddr" placeholder="ঠিকানা">
+      <input type="text" id="contactPhoneNum" placeholder="ফোন নম্বর (শুধু সংখ্যা)">
+      <button class="btn-primary" onclick="updateContactInfo()">যোগাযোগ তথ্য আপডেট করুন</button>
+    </div>
+  </div>
+
+  <!-- পাসওয়ার্ড পরিবর্তন -->
+  <div class="admin-panel">
+    <h2>🔐 পাসওয়ার্ড পরিবর্তন করুন</h2>
+    <div class="admin-form">
+      <input type="password" id="oldPassword" placeholder="বর্তমান পাসওয়ার্ড">
+      <input type="password" id="newPassword" placeholder="নতুন পাসওয়ার্ড (মিন ৪ ডিজিট)">
+      <input type="password" id="confirmPassword" placeholder="নতুন পাসওয়ার্ড আবার লিখুন">
+      <button class="btn-primary" onclick="changeAdminPassword()">পাসওয়ার্ড পরিবর্তন করুন</button>
+    </div>
+  </div>
+
+  <!-- সব প্রোডাক্ট -->
+  <div class="admin-panel">
+    <h2>📋 সব প্রোডাক্ট</h2>
+    <div id="adminProductsList"></div>
+  </div>
+</div>
+
+<!-- SPIN MODAL -->
+<div id="spinModal" class="modal">
+  <div class="login-box">
+    <span class="close-modal-btn" onclick="closeSpinModal()" style="float:right;">&times;</span>
+    <h3 style="color:var(--saffron);">🎡 স্পিন করুন ও ডিসকাউন্ট জিতুন</h3>
+    <div id="spinLoginArea">
+      <input type="tel" id="spinMobile" placeholder="মোবাইল নম্বর" maxlength="10" style="width:100%; padding:0.6rem; margin:0.5rem 0; border-radius:1rem; border:2px solid #E8821A;">
+      <div class="captcha-box">
+        <div class="captcha-code" id="captchaCode">ABCD</div>
+        <div style="display:flex; gap:0.5rem; margin-top:0.5rem;">
+          <input type="text" id="captchaInput" placeholder="ক্যাপচা লিখুন">
+          <button onclick="generateCaptcha()" style="background:#2C1810; color:white; padding:0.5rem 1rem; border:none; border-radius:0.5rem;">⟳</button>
+        </div>
+      </div>
+      <button class="btn-primary" onclick="verifySpinLogin()" style="width:100%;">🎯 লগইন করুন</button>
+    </div>
+    <div id="spinWheelArea" style="display:none;">
+      <div class="wheel-container"><canvas id="wheelCanvas" width="500" height="500"></canvas><button class="spin-btn-small" onclick="spinWheel()">SPIN</button></div>
+      <div id="spinResultArea" style="display:none;" class="result-box"><div id="couponDisplay"></div><div id="couponMsg"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- CART MODAL -->
+<div id="cartModal" class="modal">
+  <div class="cart-content"><span class="close-cart" onclick="closeCart()">&times;</span><h3>🛒 আপনার অর্ডার</h3>
+    <div id="cartItemsList"></div><hr><h3>মোট: ₹<span id="cartTotal">0</span></h3>
+    <button class="btn-primary" onclick="checkout()" style="width:100%;">📞 হোয়াটসঅ্যাপে অর্ডার করুন</button>
+  </div>
+</div>
+<div id="toastMsg" class="toast">✔️ অর্ডারে যোগ হয়েছে</div>
+
+<script>
+  // ========== imgbb API Key (আপনার API Key দিন) ==========
+  const IMGBB_API_KEY = "efcad8fb7d1ce9abddaf486180c9fc43";  // <-- এখানে আপনার API Key দিন
+
+  // ========== অ্যাডমিন সিকিউরিটি ==========
+  let ADMIN_PASSWORD = "admin123";
+  let isAdminLoggedIn = false;
+
+  function loadAdminPassword() {
+    let savedPwd = localStorage.getItem("misra_admin_password");
+    if(savedPwd) ADMIN_PASSWORD = savedPwd;
+  }
+
+  function showAdminLogin() {
+    let m = document.createElement('div'); 
+    m.id = 'adminLoginModal'; 
+    m.className = 'modal active';
+    m.innerHTML = `<div class="login-box">
+      <span class="close-modal-btn" onclick="this.parentElement.parentElement.remove()" style="float:right;">&times;</span>
+      <h2>🔐 অ্যাডমিন লগইন</h2>
+      <input type="password" id="adminPassword" placeholder="পাসওয়ার্ড লিখুন">
+      <button class="btn-primary" onclick="checkAdminLogin()">লগইন</button>
+      <div id="loginError" style="color:red;font-size:0.8rem;"></div>
+    </div>`;
+    document.body.appendChild(m);
+  }
+
+  function checkAdminLogin() {
+    let pwd = document.getElementById("adminPassword").value;
+    if (pwd === ADMIN_PASSWORD) {
+      isAdminLoggedIn = true; 
+      sessionStorage.setItem("misra_admin_logged", "true");
+      document.getElementById("adminLoginModal").remove();
+      document.getElementById("adminNavItem").style.display = "block";
+      document.getElementById("logoutBtnItem").style.display = "block";
+      showPage('admin'); 
+      renderAdminProducts(); 
+      renderAdminGallery();
+      renderAdminOffers();
+      showToast("অ্যাডমিন লগইন সফল!");
+    } else { 
+      document.getElementById("loginError").innerText = "❌ ভুল পাসওয়ার্ড!"; 
+    }
+  }
+
+  function changeAdminPassword() {
+    if(!isAdminLoggedIn) { alert("অ্যাডমিন লগইন প্রয়োজন!"); return; }
+    let oldPwd = document.getElementById("oldPassword").value;
+    let newPwd = document.getElementById("newPassword").value;
+    let confirmPwd = document.getElementById("confirmPassword").value;
+    if(oldPwd !== ADMIN_PASSWORD) { alert("❌ বর্তমান পাসওয়ার্ড ভুল!"); return; }
+    if(newPwd.length < 4) { alert("❌ পাসওয়ার্ড কমপক্ষে ৪ ডিজিটের হতে হবে!"); return; }
+    if(newPwd !== confirmPwd) { alert("❌ নতুন পাসওয়ার্ড মেলেনি!"); return; }
+    ADMIN_PASSWORD = newPwd;
+    localStorage.setItem("misra_admin_password", ADMIN_PASSWORD);
+    alert("✅ পাসওয়ার্ড সফলভাবে পরিবর্তন হয়েছে!");
+    document.getElementById("oldPassword").value = "";
+    document.getElementById("newPassword").value = "";
+    document.getElementById("confirmPassword").value = "";
+  }
+
+  function adminLogout() { isAdminLoggedIn = false; sessionStorage.removeItem("misra_admin_logged"); document.getElementById("adminNavItem").style.display = "none"; document.getElementById("logoutBtnItem").style.display = "none"; showPage('home'); showToast("লগআউট হয়েছে"); }
+  function checkExistingLogin() { if (sessionStorage.getItem("misra_admin_logged") === "true") { isAdminLoggedIn = true; document.getElementById("adminNavItem").style.display = "block"; document.getElementById("logoutBtnItem").style.display = "block"; } }
+
+  // ========== অ্যানিমেটেড গ্যালারি ডাটা ==========
+  let animatedImages = [
+    { img: "https://i.ibb.co/4KZq3Xp/rasgulla.jpg", caption: "🍬 রসগোল্লা" },
+    { img: "https://i.ibb.co/5L5xVpZ/sondesh.jpg", caption: "🍮 সন্দেশ" },
+    { img: "https://i.ibb.co/2g6Yq0X/gulabjamun.jpg", caption: "🍩 গুলাব জামুন" },
+    { img: "https://i.ibb.co/R6R8fLp/mistidoi.jpg", caption: "🍨 মিষ্টি দই" }
+  ];
+
+  function loadAnimatedGallery() {
+    let saved = localStorage.getItem("misra_animated_gallery");
+    if(saved) animatedImages = JSON.parse(saved);
+    renderAnimatedGallery();
+    renderAnimatedGalleryPreview();
+  }
+
+  function saveAnimatedGallery() {
+    localStorage.setItem("misra_animated_gallery", JSON.stringify(animatedImages));
+    renderAnimatedGallery();
+    renderAnimatedGalleryPreview();
+  }
+
+  function renderAnimatedGallery() {
+    let container = document.getElementById("animatedGalleryContainer");
+    if(!container) return;
+    let html = `<div class="animated-gallery">`;
+    animatedImages.forEach(item => {
+      html += `<div class="animated-img">
+        <img src="${item.img}" alt="${item.caption}" onerror="this.src='https://placehold.co/200x150/F0E0CC/8A6040?text=🍬'">
+        <div class="animated-caption">${item.caption}</div>
+      </div>`;
+    });
+    html += `</div>`;
+    container.innerHTML = html;
+  }
+
+  function renderAnimatedGalleryPreview() {
+    let container = document.getElementById("animatedGalleryPreview");
+    if(!container) return;
+    let html = "";
+    animatedImages.forEach((item, idx) => {
+      html += `<div style="text-align:center; width:100px;">
+        <img src="${item.img}" style="width:80px; height:80px; object-fit:cover; border-radius:0.5rem;">
+        <br><small>${item.caption}</small>
+      </div>`;
+    });
+    container.innerHTML = html;
+  }
+
+  function updateAnimatedGallery() {
+    if(!isAdminLoggedIn) { alert("অ্যাডমিন লগইন প্রয়োজন!"); return; }
+    let updated = false;
+    for(let i = 1; i <= 4; i++) {
+      let url = document.getElementById(`animatedImg${i}Url`).value.trim();
+      let file = document.getElementById(`animatedImg${i}File`).files[0];
+      if(url) {
+        animatedImages[i-1].img = url;
+        document.getElementById(`animatedImg${i}Url`).value = "";
+        updated = true;
+      } else if(file) {
+        if(file.size > 2 * 1024 * 1024) { alert(`ছবি ${i} খুব বড়! 2MB এর কম দিন`); continue; }
+        let reader = new FileReader();
+        reader.onload = (function(index) {
+          return function(e) {
+            animatedImages[index].img = e.target.result;
+            saveAnimatedGallery();
+            showToast(`ছবি ${index+1} আপডেট হয়েছে!`);
+          };
+        })(i-1);
+        reader.readAsDataURL(file);
+        document.getElementById(`animatedImg${i}File`).value = "";
+        updated = true;
+      }
+    }
+    if(updated) saveAnimatedGallery();
+    else alert("কোনো ছবি সিলেক্ট করেননি বা URL দেননি!");
+  }
+
+  // ========== ডাটা ==========
+  let products = [{ id: 1, name: "🍡 রসগোল্লা", price: 8, category: "মিষ্টি", image: "" },{ id: 2, name: "🍮 সন্দেশ", price: 8, category: "মিষ্টি", image: "" },{ id: 3, name: "🍩 গুলাব জামুন", price: 8, category: "মিষ্টি", image: "" }];
+  let cart = []; let nextId = 4;
+  let offers = [{ id: 1, title: "🎉 ১০% ছাড়", desc: "১০০০ টাকার বেশি অর্ডারে ১০% ছাড়! কোড: MISRA10" },{ id: 2, title: "🎁 ফ্রি ডেলিভারি", desc: "৫০০ টাকার বেশি অর্ডারে ফ্রি ডেলিভারি!" }];
+  let blog = { title: "আজকের স্পেশাল মিষ্টি", content: "আজ আমরা বানিয়েছি নলেন গুড়ের সন্দেশ। দারুন সুস্বাদু ও খাঁটি। দ্রুত চলে আসুন!", date: new Date().toLocaleDateString() };
+  let heroData = { badge: "✦ খাঁটি মিষ্টির ঠিকানা ✦", title: "Misra Sweets Corner" };
+  let contactData = { address: "হরিপুর, পুখুরিয়া, মালদা - 732204", phone: "917407040273" };
+  let galleryImages = [
+    "https://images.pexels.com/photos/4109704/pexels-photo-4109704.jpeg?auto=compress&cs=tinysrgb&w=300",
+    "https://images.pexels.com/photos/6973751/pexels-photo-6973751.jpeg?auto=compress&cs=tinysrgb&w=300",
+    "https://images.pexels.com/photos/4226789/pexels-photo-4226789.jpeg?auto=compress&cs=tinysrgb&w=300",
+    "https://images.pexels.com/photos/6963767/pexels-photo-6963767.jpeg?auto=compress&cs=tinysrgb&w=300"
+  ];
+  let ownerData = { name: "মালিকের বার্তা", message: "আমাদের মিষ্টি খেয়ে আপনারা সন্তুষ্ট হন, এটাই আমাদের সাফল্য। ধন্যবাদ সবাইকে।", image: "" };
+
+  function loadData() {
+    let p = localStorage.getItem("misra_products"); if(p) products = JSON.parse(p);
+    let o = localStorage.getItem("misra_offers"); if(o) offers = JSON.parse(o);
+    let b = localStorage.getItem("misra_blog"); if(b) blog = JSON.parse(b);
+    let h = localStorage.getItem("misra_hero"); if(h) heroData = JSON.parse(h);
+    let c = localStorage.getItem("misra_contact"); if(c) contactData = JSON.parse(c);
+    let g = localStorage.getItem("misra_gallery"); if(g) galleryImages = JSON.parse(g);
+    let ow = localStorage.getItem("misra_owner"); if(ow) ownerData = JSON.parse(ow);
+    let ca = localStorage.getItem("misra_cart"); if(ca) cart = JSON.parse(ca);
+    if(products.length) nextId = Math.max(...products.map(p=>p.id),0)+1;
+    updateCartUI(); renderProducts(); renderOffers(); renderBlog(); renderHero(); renderContact(); renderGallery(); renderOwner();
+  }
+  function saveProducts() { localStorage.setItem("misra_products", JSON.stringify(products)); renderProducts(); renderAdminProducts(); }
+  function saveOffers() { localStorage.setItem("misra_offers", JSON.stringify(offers)); renderOffers(); renderAdminOffers(); }
+  function saveBlog() { localStorage.setItem("misra_blog", JSON.stringify(blog)); renderBlog(); }
+  function saveHero() { localStorage.setItem("misra_hero", JSON.stringify(heroData)); renderHero(); }
+  function saveContact() { localStorage.setItem("misra_contact", JSON.stringify(contactData)); renderContact(); }
+  function saveGallery() { localStorage.setItem("misra_gallery", JSON.stringify(galleryImages)); renderGallery(); renderAdminGallery(); }
+  function saveOwner() { localStorage.setItem("misra_owner", JSON.stringify(ownerData)); renderOwner(); }
+  function saveCart() { localStorage.setItem("misra_cart", JSON.stringify(cart)); updateCartUI(); }
+
+  function updateCartUI() {
+    document.getElementById("cartCount").innerText = cart.reduce((s,i)=>s+i.quantity,0);
+    document.getElementById("cartTotal").innerText = cart.reduce((s,i)=>s+(i.price*i.quantity),0);
+    let html = ""; cart.forEach((item,idx)=>{ html+=`<div class="cart-item"><span>${item.name} x${item.quantity}</span><div><span>₹${item.price*item.quantity}</span><button class="cart-item-delete" onclick="removeFromCart(${idx})">🗑️</button></div></div>`; });
+    document.getElementById("cartItemsList").innerHTML = html || "<p>কার্ট খালি</p>";
+  }
+  function removeFromCart(idx) { cart.splice(idx,1); saveCart(); showToast("আইটেম রিমুভ হয়েছে"); }
+  function addToCart(id) { let p = products.find(p=>p.id==id); if(!p) return; let e = cart.find(i=>i.id==id); if(e) e.quantity++; else cart.push({id:p.id, name:p.name, price:p.price, quantity:1}); saveCart(); showToast(`${p.name} অর্ডারে যোগ হয়েছে`); }
+  function showToast(msg) { let t=document.getElementById("toastMsg"); t.innerText="✔️ "+msg; t.style.display="block"; setTimeout(()=>t.style.display="none",1500); }
+  function openCart() { document.getElementById("cartModal").classList.add("active"); }
+  function closeCart() { document.getElementById("cartModal").classList.remove("active"); }
+  
+  function checkout() {
+    if(cart.length === 0) { alert("কার্ট খালি"); return; }
+    let msg = "🙏 নমস্কার, আমি অর্ডার করতে চাই:%0A%0A";
+    cart.forEach(item => { msg += `🍬 ${item.name} x${item.quantity} = ₹${item.price * item.quantity}%0A`; });
+    let total = cart.reduce((s,i) => s + (i.price * i.quantity), 0);
+    msg += `%0A📦 মোট অর্ডার মূল্য: ₹${total}%0A%0A`;
+    msg += `📍 ডেলিভারি ঠিকানা: ${contactData.address}%0A%0A`;
+    msg += `🙏 অনুগ্রহ করে অর্ডার কনফার্ম করুন।`;
+    let phone = contactData.phone.replace(/[^0-9]/g, '');
+    window.open(`https://api.whatsapp.com/send?phone=${phone}&text=${msg}`, "_blank");
+  }
+  
+  function whatsappOrderDirect() {
+    let phone = contactData.phone.replace(/[^0-9]/g, '');
+    window.open(`https://api.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent("🙏 নমস্কার, আমি অর্ডার করতে চাই।")}`, "_blank");
+  }
+
+  function renderProducts() {
+    let container = document.getElementById("productsContainer"); if(!container) return;
+    let cats = [...new Set(products.map(p=>p.category))]; let html="";
+    cats.forEach(cat=>{ html+=`<div class="category-title">${cat==="মিষ্টি"?"🍬":cat==="নাস্তা"?"🍽️":"🎁"} ${cat}</div><div class="products-grid">`;
+      products.filter(p=>p.category===cat).forEach(p=>{ let imgSrc = p.image && (p.image.startsWith("http") || p.image.startsWith("data:")) ? p.image : `https://placehold.co/200x150/F0E0CC/8A6040?text=${p.name.substring(0,3)}`;
+        html+=`<div class="product-card"><img class="product-img" src="${imgSrc}" onerror="this.src='https://placehold.co/200x150/F0E0CC/8A6040?text=🍬'"><div class="product-info"><div class="product-name">${p.name}</div><div class="product-price">₹${p.price}</div><button class="add-to-cart" onclick="addToCart(${p.id})">➕ Add</button></div></div>`; });
+      html+=`</div>`; });
+    container.innerHTML = html;
+  }
+  
+  function renderAdminProducts() { 
+    let container = document.getElementById("adminProductsList"); 
+    if(!container) return; 
+    let html = ""; 
+    products.forEach(p => { 
+      let imgPreview = (p.image && (p.image.startsWith("http") || p.image.startsWith("data:"))) ? `<img src="${p.image}" style="width:40px;height:40px;object-fit:cover;border-radius:0.5rem;margin-right:0.5rem;">` : `<span style="font-size:1.5rem;margin-right:0.5rem;">🍬</span>`;
+      html+=`<div class="admin-product-item"><div style="display:flex;align-items:center;">${imgPreview}<div><strong>${p.name}</strong><br>₹${p.price} | ${p.category}</div></div><button class="delete-btn" onclick="deleteProduct(${p.id})">🗑️</button></div>`; 
+    }); 
+    container.innerHTML = html || "<p>কোনো প্রোডাক্ট নেই</p>"; 
+  }
+  
+  function addProductWithImgbbUrl() {
+    if(!isAdminLoggedIn) { alert("অ্যাডমিন লগইন প্রয়োজন!"); return; }
+    let name = document.getElementById("prodNameImgbb").value.trim();
+    let price = parseInt(document.getElementById("prodPriceImgbb").value);
+    let category = document.getElementById("prodCategoryImgbb").value;
+    let imageUrl = document.getElementById("prodImageUrlImgbb").value.trim();
+    if(!name || isNaN(price)) { alert("❌ নাম ও দাম দিন!"); return; }
+    if(!imageUrl) { alert("❌ imgbb ছবির URL দিন!"); return; }
+    products.push({ id: nextId++, name: name, price: price, category: category, image: imageUrl });
+    saveProducts();
+    document.getElementById("prodNameImgbb").value = "";
+    document.getElementById("prodPriceImgbb").value = "";
+    document.getElementById("prodImageUrlImgbb").value = "";
+    showToast("✅ imgbb লিংক দিয়ে প্রোডাক্ট যোগ হয়েছে!");
+  }
+  
+  function addProduct() {
+    if(!isAdminLoggedIn){alert("অ্যাডমিন লগইন প্রয়োজন!");return;}
+    let name=document.getElementById("prodName").value.trim();
+    let price=parseInt(document.getElementById("prodPrice").value);
+    let category=document.getElementById("prodCategory").value;
+    let file=document.getElementById("prodImage").files[0];
+    if(!name||isNaN(price)){alert("নাম ও দাম দিন");return;}
+    if(file){
+      if(file.size > 2 * 1024 * 1024){alert("ছবি খুব বড়! 2MB এর কম দিন");return;}
+      let reader=new FileReader();
+      reader.onload=function(e){
+        products.push({id:nextId++, name, price, category, image:e.target.result});
+        saveProducts();
+        document.getElementById("prodName").value="";
+        document.getElementById("prodPrice").value="";
+        document.getElementById("prodImage").value="";
+        showToast("✅ প্রোডাক্ট যোগ হয়েছে!");
+      };
+      reader.readAsDataURL(file);
+    } else {
+      products.push({id:nextId++, name, price, category, image:""});
+      saveProducts();
+      document.getElementById("prodName").value="";
+      document.getElementById("prodPrice").value="";
+      showToast("✅ প্রোডাক্ট যোগ হয়েছে (ছবি ছাড়া)");
+    }
+  }
+  
+  function deleteProduct(id) { if(!isAdminLoggedIn){alert("অ্যাডমিন লগইন প্রয়োজন!");return;} products=products.filter(p=>p.id!==id); cart=cart.filter(c=>c.id!==id); saveProducts(); saveCart(); showToast("প্রোডাক্ট ডিলিট হয়েছে"); }
+  
+  async function uploadToImgbb() {
+    let file = document.getElementById("imgbbImage").files[0];
+    if(!file) { alert("❌ একটি ছবি সিলেক্ট করুন!"); return; }
+    if(file.size > 5 * 1024 * 1024) { alert("❌ ছবি খুব বড়! 5MB এর কম দিন"); return; }
+    let formData = new FormData();
+    formData.append("image", file);
+    let resultDiv = document.getElementById("imgbbResult");
+    resultDiv.innerHTML = "⏳ আপলোড হচ্ছে...";
+    try {
+      let response = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, { method: "POST", body: formData });
+      let data = await response.json();
+      if(data.success) {
+        let imageUrl = data.data.url;
+        resultDiv.innerHTML = `✅ আপলোড সফল!<br>📋 URL: <input type="text" value="${imageUrl}" style="width:100%; margin-top:0.3rem; padding:0.3rem; border:1px solid #E8821A; border-radius:0.5rem;" readonly><br><button class="btn-outline" onclick="copyToClipboard('${imageUrl}')" style="margin-top:0.3rem;">📋 কপি করুন</button>`;
+        document.getElementById("prodImageUrlImgbb").value = imageUrl;
+      } else { resultDiv.innerHTML = "❌ আপলোড ব্যর্থ! API Key চেক করুন।"; }
+    } catch(error) { resultDiv.innerHTML = "❌ নেটওয়ার্ক সমস্যা!"; }
+  }
+  
+  function copyToClipboard(text) { navigator.clipboard.writeText(text); alert("✅ URL কপি হয়েছে!"); }
+  
+  function addOffer() { if(!isAdminLoggedIn){alert("অ্যাডমিন লগইন প্রয়োজন!");return;} let t=document.getElementById("offerTitle").value.trim(); let d=document.getElementById("offerDesc").value.trim(); if(!t||!d){alert("অফারের শিরোনাম ও বিবরণ দিন");return;} offers.push({id: Date.now(), title:t, desc:d}); saveOffers(); document.getElementById("offerTitle").value=""; document.getElementById("offerDesc").value=""; showToast("✅ অফার যোগ হয়েছে"); }
+  function deleteOffer(offerId) { if(!isAdminLoggedIn){alert("অ্যাডমিন লগইন প্রয়োজন!");return;} offers = offers.filter(o => o.id !== offerId); saveOffers(); showToast("🗑️ অফার ডিলিট হয়েছে"); }
+  function renderOffers() { let container = document.getElementById("offersContainer"); if(container){ let html=""; offers.forEach(o=>{ html+=`<div class="offer-card"><h3>${o.title}</h3><p>${o.desc}</p></div>`; }); container.innerHTML = html || "<p>কোনো অফার নেই</p>"; } }
+  function renderAdminOffers() { let container = document.getElementById("adminOffersList"); if(!container) return; let html = ""; offers.forEach(o => { html += `<div class="admin-offer-item"><div><strong>${o.title}</strong><br><small>${o.desc}</small></div><button class="delete-btn" onclick="deleteOffer(${o.id})">🗑️ ডিলিট</button></div>`; }); container.innerHTML = html || "<p>কোনো অফার নেই</p>"; }
+  
+  function saveBlog() { if(!isAdminLoggedIn){alert("অ্যাডমিন লগইন প্রয়োজন!");return;} blog.title=document.getElementById("blogTitle").value.trim(); blog.content=document.getElementById("blogText").value.trim(); blog.date=new Date().toLocaleDateString(); saveBlog(); document.getElementById("blogTitle").value=""; document.getElementById("blogText").value=""; showToast("ব্লগ সংরক্ষণ হয়েছে"); }
+  function renderBlog() { let container = document.getElementById("blogContent"); if(container){ container.innerHTML = `<div class="blog-title">📖 ${blog.title}</div><div class="blog-date">${blog.date}</div><div class="blog-content">${blog.content}</div>`; } }
+  
+  function updateHeroSection() { if(!isAdminLoggedIn){alert("অ্যাডমিন লগইন প্রয়োজন!");return;} heroData.badge=document.getElementById("heroBadgeInput").value.trim() || heroData.badge; heroData.title=document.getElementById("heroTitleInput").value.trim() || heroData.title; saveHero(); showToast("হিরো সেকশন আপডেট হয়েছে"); }
+  function renderHero() { document.getElementById("heroBadge") && (document.getElementById("heroBadge").innerText = heroData.badge); document.getElementById("heroTitle") && (document.getElementById("heroTitle").innerHTML = heroData.title.includes("Sweets") ? heroData.title : heroData.title + " <em>Sweets Corner</em>"); }
+  
+  function updateContactInfo() { if(!isAdminLoggedIn){alert("অ্যাডমিন লগইন প্রয়োজন!");return;} contactData.address=document.getElementById("contactAddr").value.trim() || contactData.address; contactData.phone=document.getElementById("contactPhoneNum").value.trim() || contactData.phone; saveContact(); showToast("যোগাযোগ তথ্য আপডেট হয়েছে"); }
+  function renderContact() { let addr=document.getElementById("contactAddress"); if(addr) addr.innerHTML = `<strong>Misra Sweets Corner</strong><br>${contactData.address}`; let ph=document.getElementById("contactPhone"); if(ph) ph.innerText = `+${contactData.phone}`; }
+  
+  function updateOwnerInfo() {
+    if(!isAdminLoggedIn){alert("অ্যাডমিন লগইন প্রয়োজন!");return;}
+    let name = document.getElementById("ownerNameInput").value.trim();
+    let msg = document.getElementById("ownerMsgInput").value.trim();
+    let file = document.getElementById("ownerImage").files[0];
+    if(name) ownerData.name = name;
+    if(msg) ownerData.message = msg;
+    if(file) {
+      let reader = new FileReader();
+      reader.onload = function(e) { ownerData.image = e.target.result; saveOwner(); showToast("Owner তথ্য সংরক্ষণ হয়েছে"); renderOwnerPreview(); };
+      reader.readAsDataURL(file);
+    } else { saveOwner(); showToast("Owner তথ্য সংরক্ষণ হয়েছে"); }
+    renderOwnerPreview();
+  }
+  function renderOwner() {
+    let img = document.getElementById("ownerImg");
+    let nameDiv = document.getElementById("ownerName");
+    let msgDiv = document.getElementById("ownerMsg");
+    if(img) img.src = ownerData.image || "https://placehold.co/100x100/E8821A/white?text=Owner";
+    if(nameDiv) nameDiv.innerText = ownerData.name;
+    if(msgDiv) msgDiv.innerText = ownerData.message;
+    renderOwnerPreview();
+  }
+  function renderOwnerPreview() {
+    let previewImg = document.getElementById("previewOwnerImg");
+    let previewName = document.getElementById("previewOwnerName");
+    let previewMsg = document.getElementById("previewOwnerMsg");
+    if(previewImg) previewImg.src = ownerData.image || "https://placehold.co/100x100/E8821A/white?text=Owner";
+    if(previewName) previewName.innerText = ownerData.name;
+    if(previewMsg) previewMsg.innerText = ownerData.message;
+  }
+  
+  function addGalleryImage() { if(!isAdminLoggedIn){alert("অ্যাডমিন লগইন প্রয়োজন!");return;} let file=document.getElementById("galleryImage").files[0]; if(!file){alert("একটি ছবি সিলেক্ট করুন");return;} let reader=new FileReader(); reader.onload=function(e){ galleryImages.push(e.target.result); saveGallery(); document.getElementById("galleryImage").value=""; showToast("গ্যালারির ছবি যোগ হয়েছে"); }; reader.readAsDataURL(file); }
+  function deleteGalleryImage(index) { if(!isAdminLoggedIn){alert("অ্যাডমিন লগইন প্রয়োজন!");return;} galleryImages.splice(index,1); saveGallery(); showToast("ছবি ডিলিট হয়েছে"); }
+  function renderGallery() { let container = document.getElementById("galleryContainer"); if(container){ let html=""; galleryImages.forEach((img,idx)=>{ html+=`<img class="gallery-img" src="${img}" onclick="window.open('${img}','_blank')">`; }); container.innerHTML = html; } }
+  function renderAdminGallery() { let container = document.getElementById("adminGalleryList"); if(container){ let html="<h3>বর্তমান গ্যালারির ছবি</h3>"; galleryImages.forEach((img,idx)=>{ html+=`<div class="admin-gallery-item"><img src="${img}" style="width:50px;height:50px;object-fit:cover;border-radius:0.5rem;"><button class="delete-btn" onclick="deleteGalleryImage(${idx})">🗑️ ডিলিট</button></div>`; }); container.innerHTML = html; } }
+
+  // ========== স্পিনার ==========
+  let prizes = [{ name:"3% ছাড়", value:"3%", code:"MISRA3", msg:"3% ছাড়!" },{ name:"5% ছাড়", value:"5%", code:"MISRA5", msg:"5% ছাড়!" },{ name:"7% ছাড়", value:"7%", code:"MISRA7", msg:"7% ছাড়!" },{ name:"₹৫০ ছাড়", value:"₹50", code:"SAVE50", msg:"₹৫০ ছাড়!" },{ name:"Better Luck", value:"0%", code:"NONE", msg:"পরের বার চেষ্টা করুন" }];
+  let currentRotation=0, isSpinning=false, currentSpinUser=null, allSpinData={}, currentCaptcha="";
+  function generateCaptcha(){ let c="",ch="ABCDEFGHJKLMNPQRSTUVWXYZ0123456789"; for(let i=0;i<5;i++) c+=ch[Math.floor(Math.random()*ch.length)]; currentCaptcha=c; if(document.getElementById("captchaCode")) document.getElementById("captchaCode").innerText=c; }
+  function drawSpinWheel(){ let c=document.getElementById("wheelCanvas"); if(!c) return; let ctx=c.getContext("2d"), center=250, rad=240, anglePer=(Math.PI*2)/prizes.length, cols=["#E8821A","#F4C542","#D94F3D","#2E7D32","#FDE9A2"]; for(let i=0;i<prizes.length;i++){ let s=i*anglePer+currentRotation, e=s+anglePer; ctx.beginPath(); ctx.fillStyle=cols[i%cols.length]; ctx.moveTo(center,center); ctx.arc(center,center,rad,s,e); ctx.fill(); ctx.save(); ctx.translate(center,center); ctx.rotate(s+anglePer/2); ctx.fillStyle="#1A0C03"; ctx.font="bold 11px Hind"; ctx.fillText(prizes[i].name, rad/1.7, 8); ctx.restore();} ctx.beginPath(); ctx.fillStyle="#1A0C03"; ctx.moveTo(center-12,12); ctx.lineTo(center,-8); ctx.lineTo(center+12,12); ctx.fill();}
+  function getWinningIndex(rot){ let anglePer=(Math.PI*2)/prizes.length; let pointer=(Math.PI*2-(rot%(Math.PI*2)))%(Math.PI*2); return Math.floor(pointer/anglePer)%prizes.length;}
+  function verifySpinLogin(){ let m=document.getElementById("spinMobile").value.trim(), cap=document.getElementById("captchaInput").value.trim().toUpperCase(); if(!m||m.length!==10){alert("সঠিক মোবাইল নম্বর দিন");return;} if(cap!==currentCaptcha){alert("ক্যাপচা ভুল");generateCaptcha();return;} currentSpinUser=m; document.getElementById("spinLoginArea").style.display="none"; document.getElementById("spinWheelArea").style.display="block"; drawSpinWheel();}
+  function spinWheel(){ if(isSpinning) return; isSpinning=true; let rand=Math.floor(Math.random()*360)+1080, finalRot=currentRotation+(rand*Math.PI/180), winIdx=getWinningIndex(finalRot), startRot=currentRotation, dur=2500, start=performance.now(); function animate(now){ let e=now-start, t=Math.min(1,e/dur), ease=1-Math.pow(1-t,4); currentRotation=startRot+(finalRot-startRot)*ease; drawSpinWheel(); if(t<1) requestAnimationFrame(animate); else{ currentRotation=finalRot%(Math.PI*2); drawSpinWheel(); isSpinning=false; let prize=prizes[winIdx]; document.getElementById("spinResultArea").style.display="block"; document.getElementById("couponDisplay").innerHTML=`🎟️ ${prize.code} (${prize.value} ছাড়)`; document.getElementById("couponMsg").innerHTML=prize.msg; } } requestAnimationFrame(animate);}
+  function openSpinModal(){ generateCaptcha(); document.getElementById("spinLoginArea").style.display="block"; document.getElementById("spinWheelArea").style.display="none"; document.getElementById("spinResultArea").style.display="none"; document.getElementById("spinMobile").value=""; document.getElementById("captchaInput").value=""; document.getElementById("spinModal").classList.add("active"); drawSpinWheel(); }
+  function closeSpinModal(){ document.getElementById("spinModal").classList.remove("active"); }
+
+  function showPage(page) {
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    if(page==='home') document.getElementById('homePage').classList.add('active');
+    if(page==='menu'){ document.getElementById('menuPage').classList.add('active'); renderProducts(); }
+    if(page==='contact') document.getElementById('contactPage').classList.add('active');
+    if(page==='offers') document.getElementById('offersPage').classList.add('active');
+    if(page==='admin'){ if(isAdminLoggedIn){ document.getElementById('adminPage').classList.add('active'); renderAdminProducts(); renderAdminGallery(); renderAdminOffers(); }else{ showAdminLogin(); } }
+    window.scrollTo(0,0);
+  }
+
+  loadAdminPassword();
+  checkExistingLogin(); 
+  loadData();
+  loadAnimatedGallery();
+  drawSpinWheel();
+</script>
+</body>
+</html>
